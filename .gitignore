@@ -1,0 +1,20 @@
+# General
+node_modules/
+.DS_Store
+.idea
+
+# Backend (Spring Boot)
+/back-end/target/
+/back-end/.idea/
+/back-end/.vscode/
+/back-end/.classpath
+/back-end/.project
+/back-end/.settings
+/back-end/*.iml
+
+# Backend (Angular)
+/front-end/node_modules/
+/front-end/dist/
+/front-end/.angular/
+/front-end/.idea/
+/front-end/.vscode/
