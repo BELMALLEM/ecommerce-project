@@ -865,7 +865,7 @@ footer ul li{
         min-width:350px
     }
       .logo{
-        text-align:center
+        text-align:center;
     }
     .header-desktop{
         position:relative;
@@ -960,7 +960,8 @@ footer ul li{
         height:80px
     }
     a.logo img{
-        width:110px
+        height: 70px;
+        width: 80px;
     }
 
     .cart-area i{
