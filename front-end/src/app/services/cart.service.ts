@@ -50,6 +50,26 @@ export class CartService {
     //publish the new values ... all subscribers will receive the new data
     this.totalPrice.next(totalPriceValue);
     this.totalQuantity.next(totalQuantityValue);
+  }
+
+  decrementQuantity(cartItem: CartItem) {
+    
+    if(cartItem.quantity === 1){
+      this.remove(cartItem);
+    }else{
+      cartItem.quantity--;
+      this.computeCartTotals();
+    }
 
   }
+
+  remove(cartItem: CartItem) {
+    const itemIndex = this.cartItems.findIndex(item => cartItem.id === item.id);
+    
+    if(itemIndex > -1){
+      this.cartItems.splice(itemIndex, 1);
+      this.computeCartTotals();
+    }
+  }
+
 }

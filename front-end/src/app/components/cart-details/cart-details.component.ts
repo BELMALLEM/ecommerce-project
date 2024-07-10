@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CartItem } from 'src/app/common/cart-item';
 import { CartService } from 'src/app/services/cart.service';
 
@@ -10,10 +10,10 @@ import { CartService } from 'src/app/services/cart.service';
 export class CartDetailsComponent implements OnInit {
 
   cartItems: CartItem[] = [];
-  totalPrice: number = 0;
-  totalQuantity: number = 0;
+  cartTotalPrice: number = 0;
+  cartTotalQuantity: number = 0;
   
-  constructor(private cartService: CartService) { }
+  constructor(private cartService: CartService, private cdRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.listCartDetails();
@@ -24,15 +24,26 @@ export class CartDetailsComponent implements OnInit {
     this.cartItems = this.cartService.cartItems;
 
     //subscribe to the cart totalPrice
-    this.cartService.totalPrice.subscribe(data => { 
-      this.totalPrice = data;
-      console.log(`Total Price: ${data}`);
-    });
+    this.cartService.totalPrice.subscribe(data => this.cartTotalPrice = data);
 
     //subscribe to the cart totalQuantity
-    this.cartService.totalQuantity.subscribe(data => this.totalQuantity = data);
+    this.cartService.totalQuantity.subscribe(data => this.cartTotalQuantity = data);
     
     //compute cart total price and quantity
+    this.cartService.computeCartTotals();
   }
+
+  incrementQuantity(cartItem: CartItem) {
+    this.cartService.addToCart(cartItem);
+  }
+  
+  decrementQuantity(cartItem: CartItem) {
+    this.cartService.decrementQuantity(cartItem);
+  }
+
+  removeFromCart(cartItem: CartItem){
+    this.cartService.remove(cartItem);
+  }
+  
 
 }
