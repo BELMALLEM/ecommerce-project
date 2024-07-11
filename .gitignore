@@ -18,3 +18,4 @@ node_modules/
 /front-end/.angular/
 /front-end/.idea/
 /front-end/.vscode/
+/front-end/package-lock.json
