@@ -9,10 +9,24 @@ export class CartService {
 
   cartItems: CartItem[] = [];
 
+  storage: Storage = localStorage;
+
   totalPrice: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   totalQuantity: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   
-  constructor() { }
+  constructor() {
+    let data = this.storage.getItem('cartItems');
+
+    if(data !== null) {
+      this.cartItems = JSON.parse(data);
+
+      this.computeCartTotals();
+    }
+   }
+
+   persistCartItems(){
+    this.storage.setItem('cartItems', JSON.stringify(this.cartItems));
+   }
 
   addToCart(cartItem: CartItem){
     //check if we already have the item in the cart
@@ -38,6 +52,15 @@ export class CartService {
     this.computeCartTotals();
   }
 
+  removeFromCart(cartItem: CartItem) {
+    if(cartItem.quantity === 1){
+      this.remove(cartItem);
+    }else{
+      cartItem.quantity--;
+      this.computeCartTotals();
+    }
+  }
+
   computeCartTotals() {
     let totalPriceValue: number = 0;
     let totalQuantityValue: number = 0;
@@ -50,17 +73,8 @@ export class CartService {
     //publish the new values ... all subscribers will receive the new data
     this.totalPrice.next(totalPriceValue);
     this.totalQuantity.next(totalQuantityValue);
-  }
 
-  decrementQuantity(cartItem: CartItem) {
-    
-    if(cartItem.quantity === 1){
-      this.remove(cartItem);
-    }else{
-      cartItem.quantity--;
-      this.computeCartTotals();
-    }
-
+    this.persistCartItems();
   }
 
   remove(cartItem: CartItem) {

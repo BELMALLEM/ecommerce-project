@@ -16,8 +16,17 @@ import { CartDetailsComponent } from './components/cart-details/cart-details.com
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { AuthGuard, provideAuth0 } from '@auth0/auth0-angular';
+import authConfig from './config/app.config';
+import { LoginComponent } from './components/login/login.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { MembersPageComponent } from './components/members-page/members-page.component';
+import { OrderHistoryComponent } from './components/order-history/order-history.component';
+
 
 const routes: Routes = [
+  {path: 'order-history', component: OrderHistoryComponent, canActivate: [AuthGuard]},
+  {path: 'members', component: MembersPageComponent, canActivate: [AuthGuard]},
   {path: 'checkout', component: CheckoutComponent},
   {path: 'cart-details', component: CartDetailsComponent},
   {path: 'products/:id', component: ProductDetailsComponent},
@@ -38,16 +47,28 @@ const routes: Routes = [
     ProductDetailsComponent,
     CartStatusComponent,
     CartDetailsComponent,
-    CheckoutComponent
+    CheckoutComponent,
+    LoginComponent,
+    MembersPageComponent,
+    OrderHistoryComponent
   ],
   imports: [
     RouterModule.forRoot(routes),
     BrowserModule,
     HttpClientModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FontAwesomeModule
   ],
-  providers: [ProductService],
+  providers: [ProductService,
+    provideAuth0({
+      domain: authConfig.oidc.domain,
+      clientId: authConfig.oidc.clientId,
+      authorizationParams: {
+        redirect_uri: window.location.origin
+      }
+    })
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

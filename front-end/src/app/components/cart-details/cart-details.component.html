@@ -23,9 +23,9 @@
                             <div class="items">
                                 <label>Quantity:</label>
                                 
-                                <div (click)="decrementQuantity(cartItem)" class="row no-gutters">
+                                <div class="row no-gutters">
                                     <div class="col">
-                                        <button class="btn btn-primary btn-sm">
+                                        <button (click)="decrementQuantity(cartItem)" class="btn btn-primary btn-sm">
                                             <i class="fa fa-minus"></i>
                                         </button>
                                     </div>

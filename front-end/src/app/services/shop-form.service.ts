@@ -4,12 +4,14 @@ import { map, Observable, of } from 'rxjs';
 import { Country } from '../common/country';
 import { State } from '../common/state';
 
+import appConfig from '../config/app.config';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ShopFormService {
 
-  private baseUrl = 'http://localhost:8080/api';
+  private baseUrl = appConfig.api.url;
 
   constructor(private httpClient: HttpClient) { }
 
@@ -23,7 +25,7 @@ export class ShopFormService {
   }
 
   getStates(countryCode: string): Observable<State[]>{
-    const searchUrl = `${this.baseUrl}/states/search/findByCountryCode?code=${countryCode}`;
+    const searchUrl = `${this.baseUrl}/states/search/country?code=${countryCode}`;
 
     return this.httpClient.get<GetResponseStates>(searchUrl).pipe(
       map(response => response._embedded.states)

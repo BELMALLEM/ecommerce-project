@@ -5,12 +5,14 @@ import { Observable, map } from 'rxjs';
 import { Product } from '../common/product';
 import { ProductCategory } from '../common/product-category';
 
+import appConfig from '../config/app.config';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  private baseUrl = 'http://localhost:8080/api';
+  private baseUrl = appConfig.api.url;
 
   constructor(private httpClient: HttpClient) { }
 
@@ -25,7 +27,7 @@ export class ProductService {
   getProductList(categoryId: number): Observable<Product[]> {
 
     //building the url based on the categoyId
-    const searchUrl = `${this.baseUrl}/products/search/findByCategoryId?id=${categoryId}`;
+    const searchUrl = `${this.baseUrl}/products/search/category?id=${categoryId}`;
 
     return this.getProducts(searchUrl);
   }
@@ -35,7 +37,7 @@ export class ProductService {
                         categoryId: number): Observable<GetResponseProducts> {
 
     //building the url based on the categoyId, page number and size
-    const searchUrl = `${this.baseUrl}/products/search/findByCategoryId?id=${categoryId}` +
+    const searchUrl = `${this.baseUrl}/products/search/category?id=${categoryId}` +
                     `&page=${pageNumber}&size=${pageSize}`;
 
     return this.httpClient.get<GetResponseProducts>(searchUrl);
@@ -44,7 +46,7 @@ export class ProductService {
   searchProducts(keyword: string): Observable<Product[]> {
 
     //building the url based on the keyword
-    const searchUrl = `${this.baseUrl}/products/search/findByNameContaining?name=${keyword}`;
+    const searchUrl = `${this.baseUrl}/products/search/contains?name=${keyword}`;
 
     return this.getProducts(searchUrl);
   }
@@ -54,7 +56,7 @@ export class ProductService {
                  keyword: string): Observable<GetResponseProducts> {
 
     //building the url based on the keyword, page number and size
-    const searchUrl = `${this.baseUrl}/products/search/findByNameContaining?name=${keyword}` +
+    const searchUrl = `${this.baseUrl}/products/search/contains?name=${keyword}` +
                     `&page=${pageNumber}&size=${pageSize}`;
 
     return this.httpClient.get<GetResponseProducts>(searchUrl);

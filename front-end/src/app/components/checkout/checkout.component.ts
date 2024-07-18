@@ -1,3 +1,4 @@
+import { CartService } from './../../services/cart.service';
 import { ShopFormService } from './../../services/shop-form.service';
 import { Component, OnInit } from '@angular/core';
 import {
@@ -6,9 +7,14 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Country } from 'src/app/common/country';
+import { Order } from 'src/app/common/order';
+import { OrderItem } from 'src/app/common/order-item';
+import { Purchase } from 'src/app/common/purchase';
 import { notOnlyWhiteSpacesValidator } from 'src/app/common/shop-form-validators';
 import { State } from 'src/app/common/state';
+import { CheckoutService } from 'src/app/services/checkout.service';
 
 @Component({
   selector: 'app-checkout',
@@ -29,21 +35,30 @@ export class CheckoutComponent implements OnInit {
   shippingAddressStates: State[] = [];
   billingAddressStates: State[] = [];
 
+  storage: Storage = sessionStorage;
+
   constructor(
     private formBuilder: FormBuilder,
-    private shopFormService: ShopFormService
+    private shopFormService: ShopFormService,
+    private cartService: CartService,
+    private checkouService: CheckoutService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    const emailPattern = '^[A-Za-z0-9._%+-]+@[A-Za-z0-9._%+-]{2,}[.][A-Za-z]{2,}$';
+    const emailPattern = '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$';
     const creditCardNumberPattern = '[0-9]{16}';
     const creditCardSecurityCodePattern = '[0-9]{3}';
+
+    this.reviewCartDetails();
+
+    const userEmail = JSON.parse(this.storage.getItem('userEmail'));
 
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
         firstName: new FormControl('', [Validators.required, Validators.minLength(3), notOnlyWhiteSpacesValidator()]),
         lastName: new FormControl('', [Validators.required, Validators.minLength(3), notOnlyWhiteSpacesValidator()]),
-        email: new FormControl('', [Validators.required, Validators.pattern(emailPattern)]),
+        email: new FormControl(userEmail, [Validators.required, Validators.pattern(emailPattern)]),
       }),
       shippingAddress: this.formBuilder.group({
         street: new FormControl('', [Validators.required, Validators.minLength(3), notOnlyWhiteSpacesValidator()]),
@@ -107,7 +122,86 @@ export class CheckoutComponent implements OnInit {
   onSubmit() {
     if (this.checkoutFormGroup.invalid) {
       this.checkoutFormGroup.markAllAsTouched;
+      return;
     }
+
+    // set up order
+    let order = new Order();
+    order.totalPrice = this.totalPrice;
+    order.totalQuantity = this.totalQuantity;
+
+    // get cart items
+    const cartItems = this.cartService.cartItems;
+
+    // create orderItems from cartItems
+    let orderItems: OrderItem[] = cartItems.map(item => new OrderItem(item));
+
+    // set up purchase
+    let purchase = new Purchase();
+
+    // populate purchase - customer
+    purchase.customer = this.checkoutFormGroup.controls['customer'].value;
+
+    // populate purchase - shipping address
+    purchase.shippingAddress = this.checkoutFormGroup.controls['shippingAddress'].value;
+    const shippingState: State = JSON.parse(JSON.stringify(purchase.shippingAddress.state));
+    const shippingcountry: Country = JSON.parse(JSON.stringify(purchase.shippingAddress.country));
+    purchase.shippingAddress.state = shippingState.name;
+    purchase.shippingAddress.country = shippingcountry.name;
+
+    // populate purchase - billing address
+    purchase.billingAddress = this.checkoutFormGroup.controls['billingAddress'].value;
+    const billingState: State = JSON.parse(JSON.stringify(purchase.billingAddress.state));
+    const billingcountry: Country = JSON.parse(JSON.stringify(purchase.billingAddress.country));
+    purchase.billingAddress.state = billingState.name;
+    purchase.billingAddress.country = billingcountry.name;
+
+    // populate purchase - order and order items
+    purchase.order = order;
+    purchase.orderItems = orderItems;
+
+    // call REST API via checkoutService
+    this.checkouService.placeOrder(purchase).subscribe(
+      {
+        next: response => {
+          alert(`Your order has been reveived.\nOrder tracking number: ${response.orderTrackingNumber}`);
+
+          // reset cart
+          this.resetCart();
+        },
+        error: error => {
+          alert(`There was an error: ${error.message}`);
+        }
+      }
+    )
+
+  }
+
+
+  reviewCartDetails() {
+
+    // subscribe to cartService.totalQuantity
+    this.cartService.totalQuantity.subscribe(
+      data => this.totalQuantity = data
+    )
+    // subscribe to cartService.totalPrice
+    this.cartService.totalPrice.subscribe(
+      data => this.totalPrice = data
+    )
+  }
+
+
+  resetCart() {
+    // reset the cart
+    this.cartService.cartItems = [];
+    this.cartService.totalPrice.next(0);
+    this.cartService.totalQuantity.next(0);
+
+    // reset the form
+    this.checkoutFormGroup.reset();
+
+    // redirect back to the products page
+    this.router.navigateByUrl("/products");
   }
 
 
@@ -125,14 +219,12 @@ export class CheckoutComponent implements OnInit {
     }
   }
 
+
   handleMonthsAndYears() {
     const creditCardFormGroup = this.checkoutFormGroup.get('creditCard');
 
     const currentYear: number = new Date().getFullYear();
     const selectedYear: number = creditCardFormGroup?.value.expirationYear;
-
-    console.log('currentYear: ' + currentYear);
-    console.log('selectedYear: ' + selectedYear);
 
     //if the current year equals the selectedY year, then start with the current month
     let startMonth: number = 1;
@@ -141,12 +233,11 @@ export class CheckoutComponent implements OnInit {
       startMonth = new Date().getMonth() + 1;
     }
 
-    console.log('startMonth: ' + startMonth);
-
     this.shopFormService
       .getCreditCardMonths(startMonth)
       .subscribe((data) => (this.creditCardMonths = data));
   }
+
 
   getStates(formGroupName: string) {
     const formGroup = this.checkoutFormGroup.get(formGroupName);
@@ -166,3 +257,4 @@ export class CheckoutComponent implements OnInit {
     });
   }
 }
+
