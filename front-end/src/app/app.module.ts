@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ProductService } from './services/product.service';
 import { Routes, RouterModule } from '@angular/router';
 import { ProductCategoryMenuComponent } from './components/product-category-menu/product-category-menu.component';
@@ -16,7 +16,7 @@ import { CartDetailsComponent } from './components/cart-details/cart-details.com
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { AuthGuard, provideAuth0 } from '@auth0/auth0-angular';
+import { AuthGuard, AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
 import authConfig from './config/app.config';
 import { LoginComponent } from './components/login/login.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -58,16 +58,25 @@ const routes: Routes = [
     HttpClientModule,
     NgbModule,
     ReactiveFormsModule,
-    FontAwesomeModule
-  ],
-  providers: [ProductService,
-    provideAuth0({
+    FontAwesomeModule,
+    AuthModule.forRoot({
       domain: authConfig.oidc.domain,
       clientId: authConfig.oidc.clientId,
       authorizationParams: {
-        redirect_uri: window.location.origin
-      }
-    })
+        redirect_uri: window.location.origin,
+        audience: authConfig.oidc.audience
+      },
+      // The AuthHttpInterceptor configuration
+      httpInterceptor: {
+        allowedList: [
+          // Attach access tokens to any calls that start with '/api/'
+          '/api/*'
+        ],
+      },
+    }),
+  ],
+  providers: [ProductService,
+             {provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

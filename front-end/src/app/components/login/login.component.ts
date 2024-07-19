@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
   }
 
   logout() {
-    this.auth.logout({logoutParams: {returnTo: this.doc.location.origin}});
+    this.auth.logout({ returnTo: this.doc.location.origin });
     this.storage.clear();
   }
 
