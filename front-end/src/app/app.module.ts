@@ -17,11 +17,11 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AuthGuard, AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
-import authConfig from './config/app.config';
 import { LoginComponent } from './components/login/login.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MembersPageComponent } from './components/members-page/members-page.component';
 import { OrderHistoryComponent } from './components/order-history/order-history.component';
+import { environment } from 'src/environments/environment';
 
 
 const routes: Routes = [
@@ -60,11 +60,11 @@ const routes: Routes = [
     ReactiveFormsModule,
     FontAwesomeModule,
     AuthModule.forRoot({
-      domain: authConfig.oidc.domain,
-      clientId: authConfig.oidc.clientId,
+      domain: environment.oidc.domain,
+      clientId: environment.oidc.clientId,
       authorizationParams: {
         redirect_uri: window.location.origin,
-        audience: authConfig.oidc.audience
+        audience: environment.oidc.audience
       },
       // The AuthHttpInterceptor configuration
       httpInterceptor: {

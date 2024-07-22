@@ -89,25 +89,6 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-3"><label>State</label></div>
-                        <div class="col-md-9">
-                            <div class="input-space">
-                                <select formControlName="state" >
-                                    <option *ngFor="let state of shippingAddressStates" [ngValue]="state">
-                                        {{ state.name }}
-                                    </option>
-                                </select>
-
-                                <div *ngIf="shippingState?.invalid && (shippingState?.dirty || shippingState?.touched)" class="form-label text-danger">
-                                    <div *ngIf="shippingState?.hasError('required')">
-                                        Shipping State is required
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
                         <div class="col-md-3"><label>City</label></div>
                         <div class="col-md-9">
                             <div class="input-space">
@@ -137,6 +118,25 @@
                                     </div>
                                     <div *ngIf="shippingStreet?.hasError('minlength') && !shippingStreet?.hasError('onlyWhitespaces')">
                                         Shipping Stree must be at least 3 characters long
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3"><label>State</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <select formControlName="state" >
+                                    <option *ngFor="let state of shippingAddressStates" [ngValue]="state">
+                                        {{ state.name }}
+                                    </option>
+                                </select>
+
+                                <div *ngIf="shippingState?.invalid && (shippingState?.dirty || shippingState?.touched)" class="form-label text-danger">
+                                    <div *ngIf="shippingState?.hasError('required')">
+                                        Shipping State is required
                                     </div>
                                 </div>
                             </div>
@@ -201,25 +201,6 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-3"><label>State</label></div>
-                        <div class="col-md-9">
-                            <div class="input-space">
-                                <select formControlName="state">
-                                    <option *ngFor="let state of billingAddressStates" [ngValue]="state">
-                                        {{ state.name }}
-                                    </option>
-                                </select>
-
-                                <div *ngIf="billingState?.invalid && (billingState?.dirty || billingState?.touched)" class="form-label text-danger">
-                                    <div *ngIf="billingState?.hasError('required')">
-                                         Billing State is required
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
                         <div class="col-md-3"><label>City</label></div>
                         <div class="col-md-9">
                             <div class="input-space">
@@ -256,6 +237,25 @@
                     </div>
 
                     <div class="row">
+                        <div class="col-md-3"><label>State</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <select formControlName="state">
+                                    <option *ngFor="let state of billingAddressStates" [ngValue]="state">
+                                        {{ state.name }}
+                                    </option>
+                                </select>
+
+                                <div *ngIf="billingState?.invalid && (billingState?.dirty || billingState?.touched)" class="form-label text-danger">
+                                    <div *ngIf="billingState?.hasError('required')">
+                                         Billing State is required
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-3"><label>Zip Code</label></div>
                         <div class="col-md-9">
                             <div class="input-space">
@@ -276,116 +276,20 @@
                 <!-- ends billing address form group-->
 
 
-                <!-- credit form group -->
-                <div formGroupName="creditCard" class="form-area">
-                    <h3>Credit Card</h3>
+                <!-- Credit Card form group -->
+                
+                <!-- Stripe credit card section -->
+                 <div formGroupName="creditCard" class="form-area">
+                    <h3>Credit or Debit Card</h3>
 
-                    <div class="row">
-                        <div class="col-md-3"><label>Card Type</label></div>
-                        <div class="col-md-9">
-                            <div class="input-space">
-                                <select formControlName="cardType">
-                                    <option>Visa</option>
-                                    <option>Mastercard</option>
-                                </select>
+                    <div id="card-element">
 
-                                <div *ngIf="creditCardType?.invalid && (creditCardType?.dirty || creditCardType?.touched)" class="form-label text-danger">
-                                    <div *ngIf="creditCardType?.hasError('required')">
-                                        Card Type is required
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-3"><label>Name on Card</label></div>
-                        <div class="col-md-9">
-                            <div class="input-space">
-                                <input formControlName="nameOnCard" type="text">
+                    <!-- Credit Card related errors -->
+                     <div id="card-errors" class="displayError.textContent!=='': 'alert alert-danger mt-1'"></div>
+                 </div>
 
-                                <div *ngIf="creditCardName?.invalid && (creditCardName?.dirty || creditCardName?.touched)" class="form-label text-danger">
-                                    <div *ngIf="creditCardName?.hasError('required') || creditCardName?.hasError('onlyWhitespaces')">
-                                        Name cannot be blank
-                                    </div>
-                                    <div *ngIf="creditCardName?.hasError('minlength') && !creditCardName?.hasError('onlyWhitespaces')">
-                                        Name must be at least 3 characters long
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3"><label>Card Number</label></div>
-                        <div class="col-md-9">
-                            <div class="input-space">
-                                <input formControlName="cardNumber" type="text">
-
-                                <div *ngIf="creditCardNumber?.invalid && (creditCardNumber?.dirty || creditCardNumber?.touched)" class="form-label text-danger">
-                                    <div *ngIf="creditCardNumber?.hasError('required')">
-                                        Card Number cannot be blank
-                                    </div>
-                                    <div *ngIf="creditCardNumber?.hasError('pattern')">
-                                        Card Number must be 16 digits long
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3"><label>Security Code</label></div>
-                        <div class="col-md-9">
-                            <div class="input-space">
-                                <input formControlName="securityCode" type="text">
-
-                                <div *ngIf="creditCardSecurityCode?.invalid && (creditCardSecurityCode?.dirty || creditCardSecurityCode?.touched)" class="form-label text-danger">
-                                    <div *ngIf="creditCardSecurityCode?.hasError('required')">
-                                        Security Code cannot be blank
-                                    </div>
-                                    <div *ngIf="creditCardSecurityCode?.hasError('pattern')">
-                                        Security Code must be 3 digits long
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3"><label>Expiration Month</label></div>
-                        <div class="col-md-9">
-                            <div class="input-space">
-                                <select formControlName="expirationMonth">
-                                    <option *ngFor="let month of creditCardMonths">{{ month }}</option>
-                                </select>
-
-                                <div *ngIf="creditCardExpirationMonth?.invalid && (creditCardExpirationMonth?.dirty || creditCardExpirationMonth?.touched)" class="form-label text-danger">
-                                    <div *ngIf="creditCardExpirationMonth?.hasError('required')">
-                                        Expiration Month is required
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3"><label>Expiration Year</label></div>
-                        <div class="col-md-9">
-                            <div class="input-space">
-                                <select formControlName="expirationYear" (change)="handleMonthsAndYears()">
-                                    <option *ngFor="let year of creditCardYears">{{ year }}</option>
-                                </select>
-
-                                <div *ngIf="creditCardExpirationYear?.invalid && (creditCardExpirationYear?.dirty || creditCardExpirationYear?.touched)" class="form-label text-danger">
-                                    <div *ngIf="creditCardExpirationYear?.hasError('required')">
-                                        Expiration Year is required
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <!-- ends credit card form group-->
 
                 <!-- Oder details-->
@@ -394,14 +298,14 @@
 
                     <p>Total Quantity: {{ totalQuantity }}</p>
                     <p>Shipping: FREE</p>
-                    <p>Total Price: {{ totalPrice | currency:'MAD'}}</p>
+                    <p>Total Price: {{ totalPrice | currency:'USD'}}</p>
                 </div>
                 <!-- Ends order details -->
 
 
                 <!-- Submit Button-->
                 <div class="text-center">
-                    <button type="submit" class="btn btn-info">Purchase</button>
+                    <button type="submit" class="btn btn-info" [disabled]="isPurchaseDisabled">Purchase</button>
                 </div>
             </form>
 

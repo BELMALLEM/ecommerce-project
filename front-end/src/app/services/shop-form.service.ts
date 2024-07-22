@@ -4,14 +4,14 @@ import { map, Observable, of } from 'rxjs';
 import { Country } from '../common/country';
 import { State } from '../common/state';
 
-import appConfig from '../config/app.config';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShopFormService {
 
-  private baseUrl = appConfig.api.url;
+  private baseUrl = environment.api.url;
 
   constructor(private httpClient: HttpClient) { }
 
@@ -31,29 +31,6 @@ export class ShopFormService {
       map(response => response._embedded.states)
     )
   }
-
-  getCreditCardMonths(startMonth: number): Observable<number[]>{
-    let data: number[] = [];
-
-    for(let month=startMonth; month<=12; month++){
-      data.push(month);
-    }
-
-    return of(data);
-  }
-
-  getCreditCardYears(): Observable<number[]>{
-    let data: number[] = [];
-    const startYear: number = new Date().getFullYear();
-    const endYear: number = startYear + 10;
-
-    for(let year=startYear; year <= endYear; year++){
-      data.push(year);
-    }
-
-    return of(data);
-  }
-
 }
 
 

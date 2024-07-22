@@ -17,7 +17,7 @@
                         </td>
                         <td>
                             <p>{{ cartItem.name}}</p>
-                            <p>{{ cartItem.unitPrice | currency:'MAD' }}</p>
+                            <p>{{ cartItem.unitPrice | currency:'USD' }}</p>
                         </td>
                         <td>
                             <div class="items">
@@ -54,7 +54,7 @@
                         <td colspan="2"></td>
                         <td style="font-weight: bold;">
                             <p>Total Quantity: {{ cartTotalQuantity }}</p>
-                            <p>Total Price: {{ cartTotalPrice | currency: 'MAD' }}</p>
+                            <p>Total Price: {{ cartTotalPrice | currency: 'USD' }}</p>
                             <p>Shipping: FREE</p>
                             <div>
                                 <a routerLink="/checkout" class="btn btn-primary">Checkout</a>

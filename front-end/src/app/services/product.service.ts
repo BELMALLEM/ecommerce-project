@@ -5,14 +5,14 @@ import { Observable, map } from 'rxjs';
 import { Product } from '../common/product';
 import { ProductCategory } from '../common/product-category';
 
-import appConfig from '../config/app.config';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  private baseUrl = appConfig.api.url;
+  private baseUrl = environment.api.url;
 
   constructor(private httpClient: HttpClient) { }
 

@@ -57,6 +57,12 @@
             <version>3.0.5</version>
         </dependency>
 
+        <!-- Stripe Dependency -->
+        <dependency>
+            <groupId>com.stripe</groupId>
+            <artifactId>stripe-java</artifactId>
+            <version>26.0.0</version>
+        </dependency>
 
         <dependency>
             <groupId>com.mysql</groupId>

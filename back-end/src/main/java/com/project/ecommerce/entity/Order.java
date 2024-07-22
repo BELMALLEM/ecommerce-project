@@ -7,7 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +18,6 @@ import java.util.Set;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
     private Long id;
 
     @Column(name="order_tracking_number")
@@ -30,16 +29,15 @@ public class Order {
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
-    @Column(name = "status")
     private Long status;
 
     @Column(name = "date_created")
     @CreationTimestamp
-    private Date dateCreated;
+    private Instant dateCreated;
 
     @Column(name = "last_updated")
     @UpdateTimestamp
-    private Date lastUpdated;
+    private Instant lastUpdated;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private Set<OrderItem> orderItems = new HashSet<>();
@@ -58,8 +56,6 @@ public class Order {
 
     public void add(OrderItem item){
         if( item != null){
-            if(orderItems == null) orderItems = new HashSet<>();
-
             orderItems.add(item);
             item.setOrder(this);
         }

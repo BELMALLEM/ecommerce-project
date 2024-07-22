@@ -1,3 +1,6 @@
+####
+# SSL Configuration
+####
 server:
   port: 8443
   ssl:
@@ -7,13 +10,22 @@ server:
     key-store-password: secret
     key-store-type: JKS
 
+####
+# Logging Configuration
+####
 logging:
   level:
     org.springframework.security: DEBUG
 
+####
+# Auth0 Configuration
+####
 auth0:
   audience: http://ecommerce/api
 
+####
+# Spring Related Configuration Security, Data, H2, JPA
+####
 spring:
   security:
     oauth2:
@@ -56,3 +68,11 @@ spring:
   #   properties:
   #     hibernate:
   #       dialect: org.hibernate.dialect.MySQL8Dialect
+
+
+####
+# Stripe SDK Configuration
+####
+stripe:
+  key:
+    secret: sk_test_51PfIW22M3hIDEZfu1fxvMY1Kit3PQ0tFp4n8CBsLTnzsCJvLlv2WdGK0C67wZO6rBsQj5HZSFJ7Isdz1saUq1NJC00Y0ZoIUpP

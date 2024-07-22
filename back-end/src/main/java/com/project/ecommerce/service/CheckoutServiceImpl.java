@@ -1,54 +1,62 @@
 package com.project.ecommerce.service;
 
 import com.project.ecommerce.dao.CustomerRepository;
+import com.project.ecommerce.dto.PaymentInfo;
 import com.project.ecommerce.dto.Purchase;
 import com.project.ecommerce.dto.PurchaseResponse;
-import com.project.ecommerce.entity.Customer;
-import com.project.ecommerce.entity.Order;
-import com.project.ecommerce.entity.OrderItem;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentCreateParams;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
 import java.util.UUID;
 
 @Service
 public class CheckoutServiceImpl implements CheckoutService {
-    private CustomerRepository customerRepository;
 
-    public CheckoutServiceImpl(CustomerRepository customerRepository){
+    private final CustomerRepository customerRepository;
+    public CheckoutServiceImpl(CustomerRepository customerRepository, @Value("${stripe.key.secret}") String secretKey){
         this.customerRepository = customerRepository;
+        Stripe.apiKey = secretKey;
     }
 
     @Override
     public PurchaseResponse placeOrder(Purchase purchase){
-        // retrieve the order from the dto
-        Order order = purchase.getOrder();
+        var order = purchase.order();
 
-        // generate tracking number
-        String orderTrackingNumber = generateTrackingNumber();
+        var orderTrackingNumber = generateTrackingNumber();
         order.setOrderTrackingNumber(orderTrackingNumber);
 
-        // populate order with orderItems
-        Set<OrderItem> orderItems = purchase.getOrderItems();
-        orderItems.forEach(orderItem -> order.add(orderItem));
+        var orderItems = purchase.orderItems();
+        orderItems.forEach(order::add);
 
-        // populate order with billingAddress and shippingAddress
-        order.setShippingAddress(purchase.getShippingAddress());
-        order.setBillingAddress(purchase.getBillingAddress());
+        order.setShippingAddress(purchase.shippingAddress());
+        order.setBillingAddress(purchase.billingAddress());
 
-        // populate customer with order
-        Customer customer = purchase.getCustomer();
-        String email = customer.getEmail();
+        var customer = purchase.customer();
+        var email = customer.getEmail();
 
-        Customer customerFromDB = customerRepository.findByEmail(email);
+        var customerFromDB = customerRepository.findByEmail(email);
         if(customerFromDB != null) {
             customer = customerFromDB;
         }
         customer.add(order);
 
-        // save to database
         customerRepository.save(customer);
         return new PurchaseResponse(orderTrackingNumber);
+    }
+
+    @Override
+    public PaymentIntent createPaymentIntent(PaymentInfo paymentInfo) throws StripeException {
+        return PaymentIntent.create(PaymentIntentCreateParams.builder()
+                .setAmount(paymentInfo.amount())
+                .setCurrency(paymentInfo.currency())
+                .setReceiptEmail(paymentInfo.receiptEmail())
+                .addPaymentMethodType("card")
+                .setDescription("Just Carrots Purchase")
+                .build());
     }
 
     private String generateTrackingNumber() {
