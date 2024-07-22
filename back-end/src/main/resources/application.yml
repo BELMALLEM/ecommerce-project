@@ -1,3 +1,12 @@
+server:
+  port: 8443
+  ssl:
+    enabled: true
+    key-alias: ecommerce
+    key-store: classpath:ecommerce-keystore.p12
+    key-store-password: secret
+    key-store-type: JKS
+
 logging:
   level:
     org.springframework.security: DEBUG
@@ -11,14 +20,13 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: https://dev-usnrgcejoh3hh0zu.us.auth0.com/
+  cors:
+    allowedOrigins: https://localhost:4200
+
   data:
     rest:
       detection-strategy: ANNOTATED
       base-path: /api
-
-  cors:
-    allowedOrigins: http://localhost:4200
-
   h2:
     console:
       enabled: true

@@ -1,6 +1,6 @@
 export default {
     app: {
-        url: 'http://localhost:4200',
+        url: 'https://localhost:8443',
     },
     oidc: {
         domain: 'dev-usnrgcejoh3hh0zu.us.auth0.com',
