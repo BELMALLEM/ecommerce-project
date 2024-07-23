@@ -4,7 +4,7 @@ services:
   backend:
     build:
       context: ./back-end
-      dockerfile: DOCKERFILE
+      dockerfile: Dockerfile
     ports:
       - "8443:8443"
     networks:
@@ -15,7 +15,7 @@ services:
   frontend:
     build:
       context: ./front-end
-      dockerfile: DOCKERFILE
+      dockerfile: Dockerfile
     ports:
       - "4200:80"
     networks:
