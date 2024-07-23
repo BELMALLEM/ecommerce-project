@@ -1,4 +1,4 @@
-import { OrderHistory } from './order-history';
+import { OrderHistory } from "./order-history";
 
 describe('OrderHistory', () => {
   it('should create an instance', () => {
