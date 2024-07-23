@@ -29,7 +29,8 @@ public class Order {
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
-    private Long status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status = OrderStatus.NEW;
 
     @Column(name = "date_created")
     @CreationTimestamp
@@ -39,18 +40,18 @@ public class Order {
     @UpdateTimestamp
     private Instant lastUpdated;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", fetch = FetchType.LAZY)
     private Set<OrderItem> orderItems = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "shipping_address_id", referencedColumnName = "id")
     private Address shippingAddress;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "billing_address_id", referencedColumnName = "id")
     private Address billingAddress;
 
@@ -59,5 +60,9 @@ public class Order {
             orderItems.add(item);
             item.setOrder(this);
         }
+    }
+
+    public enum OrderStatus {
+        NEW, PROCESSING, COMPLETED, CANCELED
     }
 }
