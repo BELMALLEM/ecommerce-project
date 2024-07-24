@@ -287,7 +287,9 @@
                     </div>
 
                     <!-- Credit Card related errors -->
-                     <div id="card-errors" class="displayError.textContent!=='': 'alert alert-danger mt-1'"></div>
+                    <div #creditCardErrors id="card-errors" 
+                                           [ngClass]="cardErrorElement?.nativeElement.textContent==''? '':'alert alert-danger mt-1'">
+                    </div>
                  </div>
 
                 <!-- ends credit card form group-->
