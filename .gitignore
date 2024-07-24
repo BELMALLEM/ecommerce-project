@@ -4,18 +4,18 @@ node_modules/
 .idea
 
 # Backend (Spring Boot)
-/back-end/target/
-/back-end/.idea/
-/back-end/.vscode/
-/back-end/.classpath
-/back-end/.project
-/back-end/.settings
-/back-end/*.iml
+/api/target/
+/api/.idea/
+/api/.vscode/
+/api/.classpath
+/api/.project
+/api/.settings
+/api/*.iml
 
 # Backend (Angular)
-/front-end/node_modules/
-/front-end/dist/
-/front-end/.angular/
-/front-end/.idea/
-/front-end/.vscode/
-/front-end/package-lock.json
+/ui/node_modules/
+/ui/dist/
+/ui/.angular/
+/ui/.idea/
+/ui/.vscode/
+/ui/package-lock.json
