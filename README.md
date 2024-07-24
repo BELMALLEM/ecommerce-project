@@ -110,7 +110,7 @@ Installation
 ### Backend Setup
 
 1.  ```
-     codegit clone https://github.com/your-username/ecommerce-app.git
+     git clone https://github.com/your-username/ecommerce-app.git
      cd ecommerce-app/api
     ```
 2.  Configure the database:
