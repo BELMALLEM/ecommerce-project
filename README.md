@@ -109,24 +109,27 @@ Installation
 
 ### Backend Setup
 
-1.  bashCopy codegit clone https://github.com/your-username/ecommerce-app.git cd ecommerce-app/api
-    
+1.  ```
+     codegit clone https://github.com/your-username/ecommerce-app.git
+     cd ecommerce-app/api
+    ```
 2.  Configure the database:
     
     *   Create a MySQL database named ecommerce\_db.
         
     *   Update the database credentials in application.properties.
         
-3.  bashCopy codemvn spring-boot:run
-    
+3.  ```
+    mvn spring-boot:run
+    ```
 
 ### Frontend Setup
 
-1.  bashCopy codecd ../ui
+1.   ```cd ../ui ```
     
 2.  bashCopy codenpm install
     
-3.  bashCopy codenpm start
+3.   ```npm start ```
     
 4.  Open your browser and visit https://localhost:4200 to view the application.
     
@@ -159,6 +162,8 @@ Production
 ----------
 
 *   Deploy the frontend and backend separately.
+Note: A docker-compose file has been added to run the project in a single command
+ ```docker-compose up  ```
     
 *   Configure environment-specific properties for production deployments.
     
