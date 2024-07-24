@@ -83,9 +83,11 @@ Features
     
 *   Order placement and tracking
     
-*   User account management
+*   User account management (managed externally byt Auth0)
+
+*   Payment with Credit Card using Stripe
     
-*   Admin dashboard for managing products, orders, and users
+*   Admin dashboard for managing products, orders, and users (TO-DO)
     
 
 Getting Started
@@ -107,26 +109,29 @@ Installation
 
 ### Backend Setup
 
-1.  bashCopy codegit clone https://github.com/your-username/ecommerce-app.gitcd ecommerce-app/backend
-    
+1.  ```
+     git clone https://github.com/your-username/ecommerce-app.git
+     cd ecommerce-app/api
+    ```
 2.  Configure the database:
     
     *   Create a MySQL database named ecommerce\_db.
         
     *   Update the database credentials in application.properties.
         
-3.  bashCopy codemvn spring-boot:run
-    
+3.  ```
+    mvn spring-boot:run
+    ```
 
 ### Frontend Setup
 
-1.  bashCopy codecd ../frontend
+1.   ```cd ../ui ```
     
 2.  bashCopy codenpm install
     
-3.  bashCopy codenpm start
+3.   ```npm start ```
     
-4.  Open your browser and visit http://localhost:4200 to view the application.
+4.  Open your browser and visit https://localhost:4200 to view the application.
     
 
 Usage
@@ -134,7 +139,7 @@ Usage
 
 *   **User:** Register an account, browse products, add items to cart, place orders.
     
-*   **Admin:** Manage products, view orders, manage users.
+*   **Admin:** Manage products, view orders, manage users. (TO-DO)
     
 
 API Documentation
@@ -142,7 +147,7 @@ API Documentation
 
 *   The backend API endpoints are documented using Swagger UI.
     
-*   Access the documentation at http://localhost:8080/swagger-ui.html after starting the backend server.
+*   Access the documentation at https://localhost:8443/swagger-ui.html after starting the backend server.
     
 
 Development
@@ -157,6 +162,8 @@ Production
 ----------
 
 *   Deploy the frontend and backend separately.
+Note: A docker-compose file has been added to run the project in a single command
+ ```docker-compose up  ```
     
 *   Configure environment-specific properties for production deployments.
     
