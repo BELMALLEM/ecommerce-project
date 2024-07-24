@@ -4,10 +4,10 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build --prod
+RUN npm run build
 
 # Stage 2: Serve
 FROM nginx:1.23
-COPY --from=build /app/dist/front-end /usr/share/nginx/html
+COPY --from=build /app/dist/ui /usr/share/nginx/html
 EXPOSE 4200
 CMD ["nginx", "-g", "daemon off;"]
