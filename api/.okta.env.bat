@@ -1,3 +1,0 @@
-set OKTA_OAUTH2_ISSUER=https://dev-usnrgcejoh3hh0zu.us.auth0.com/
-set OKTA_OAUTH2_CLIENT_ID=XSx7ECfE1M5ZUeaw6WcwLqKQS0IxD7bl
-set OKTA_OAUTH2_CLIENT_SECRET=1YndaxVs1iUKqrH_Ba__9MrinTfhXTAXo52BL92A5hjX9dAw_G9ileNcrJI4l4WZ
