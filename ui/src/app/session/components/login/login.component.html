@@ -1,9 +1,7 @@
 <div class="login-status-header">
-    <div *ngIf="isAuthenticated && user" class="login-status-user-info">
-       Welcome {{ user.name }}
-    </div>
-
-    <button *ngIf="!isAuthenticated" (click)="login()" class="security-btn">Login</button>
+    <button *ngIf="!isAuthenticated" (click)="login()">
+        <i class="fas fa-user"></i>
+    </button>
 
     <div  *ngIf="isAuthenticated" class="log-buttons">
 
@@ -12,7 +10,7 @@
         
         <div class="vertical-separator mx-3"></div>
 
-        <button (click)="logout()" class="security-btn">Logout</button>
+        <button (click)="logout()" class="security-btn">Sign Out</button>
     
     </div>
 </div>

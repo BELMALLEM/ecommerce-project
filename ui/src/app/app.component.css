@@ -1,0 +1,11 @@
+.header-left {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  flex: auto;
+  margin-left: 20px;
+}
+
+.logo {
+   width: 200px;
+}

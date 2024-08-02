@@ -1,11 +1,14 @@
-.cart-area.d-n{
+.cart-icon.d-n{
     display:block; 
 }
 
-.cart-area i{
+.cart-icon i{
     font-size:22px;
     float:left;
-    margin-top:16px;
-    color:#fff;
-    margin-left:15px;
+    margin-top:10px;
+    color: #3c434a;
+}
+
+.cart-icon:hover {
+    color: #050505; /* Icon hover color */
 }
